@@ -1,0 +1,45 @@
+h1 {
+    color: red
+}
+
+.container {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.menu {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.menu li {
+    display: inline-block
+}
+
+.menu li:after {
+    content: "\00a0";
+}
+
+.red {
+    color: red;
+}
+
+.blue {
+    color: blue;
+}
+
+.message-container {
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid;
+    word-wrap: break-word;
+}
+
+img {
+    width: 100%;
+}
+
+textarea {
+    width: 50%;
+    height: 150px;
+}

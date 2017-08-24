@@ -1,0 +1,69 @@
+{{#if likedBy}}
+    <h3>Your message has been liked by {{likedBy}}</h3>
+{{/if}}
+{{#ifCond currentUser.username partnerUsername}}
+    <h3>Chat with {{username}}</h3>
+{{/ifCond }}
+{{#ifCond currentUser.username username}}
+    <h2>Chat with {{partnerUsername}}</h2>
+{{/ifCond }}
+<br>
+<div class="message-container">
+    {{#each messages}}
+        <!--If the sender of the message is the thread starter-->
+        {{#ifCond ../username sender}}
+            {{#if isHyperLink}}
+                <div><a href="{{text}}" target="_blank">{{text}}</a></div>
+            {{else if isImage}}
+                <div><img src="{{text}}" /></div>
+            {{else}}
+                <div class="red"><strong>{{text}}</strong></div>
+                <!--If the sender of the message is not the currently logged user-->
+                {{#ifNotEqual ../currentUser.username sender}}
+                    <form id="{{_id}}" action="/like/{{../threadId}}/{{_id}}" method="POST"></form>
+                    {{#if likedBy}}
+                        <a href="javascript:document.getElementById('{{_id}}').submit()">Unlike</a>
+                    {{else}}
+                        <a href="javascript:document.getElementById('{{_id}}').submit()">Like</a>
+                    {{/if}}
+                {{/ifNotEqual}}
+            {{/if}}
+        {{/ifCond }}
+        <!--If the sender of the message is the partner of the thread starter-->
+        {{#ifCond ../partnerUsername sender}}
+            {{#if isHyperLink}}
+                <div><a href="{{text}}" target="_blank">{{text}}</a></div>
+            {{else if isImage}}
+                <div><img src="{{text}}" /></div>
+            {{else}}
+                <div class="blue"><strong>{{text}}</strong></div>
+                <!--If the sender of the message is not the currently logged user-->
+                {{#ifNotEqual ../currentUser.username sender}}
+                    <form id="{{_id}}" action="/like/{{../threadId}}/{{_id}}" method="POST"></form>
+                    {{#if likedBy}}
+                    <a href="javascript:document.getElementById('{{_id}}').submit()">Unlike</a>
+                    {{else}}
+                    <a href="javascript:document.getElementById('{{_id}}').submit()">Like</a>
+                    {{/if}}
+                {{/ifNotEqual}}
+            {{/if}}
+        {{/ifCond }}
+        <br>
+    {{/each}}
+</div>
+<br>
+<form action="/thread/{{threadId}}" method="POST">
+    Type your message:
+    <br/>
+    <!--If your partner in chat has blocked you, disable the textarea-->
+{{#ifCond partnerUsername blockedUser}}
+    <textarea name="message" disabled></textarea>
+    <br/>
+    <input type="submit" disabled value="Submit"/>
+{{else}}
+    <textarea name="message"></textarea>
+    <br/>
+    <input type="submit" value="Submit"/>
+{{/ifCond}}
+</form>
+

@@ -1,0 +1,36 @@
+{{#if currentUser}}
+    <h3>Search for user:</h3>
+    <form action="/" method="GET">
+        <input type="text" name="search"/>
+        <input type="submit" value="Search"/>
+    </form>
+    <br>
+    <h2>Users:</h2>
+    {{#each users}}
+        <!--You can't start a chat with yourself-->
+        {{#ifNotEqual ../currentUser.username username}}
+        {{username}}
+        <a href="thread/{{username}}">Start chat</a>
+        <form id="{{username}}" action="/block/{{username}}" method="POST"></form>
+        {{#ifCond ../currentUser.username blockedBy }}
+            <a href="javascript:document.getElementById('{{username}}').submit()">Remove Block</a>
+        {{else}}
+            <a href="javascript:document.getElementById('{{username}}').submit()">Block</a>
+        {{/ifCond}}
+        <br><br>
+        {{/ifNotEqual}}
+    {{/each}}
+
+    <h2>My Threads:</h2>
+    {{#each threads}}
+        {{#ifCond ../currentUser.username partnerId.username}}
+            With <a href="thread/{{userId.username}}">{{userId.username}}</a>
+        {{/ifCond }}
+        {{#ifCond ../currentUser.username userId.username}}
+            With <a href="thread/{{partnerId.username}}">{{partnerId.username}}</a>
+        {{/ifCond }}
+        <br>
+    {{/each}}
+{{else}}
+    <h1>Welcome to Messenger system!</h1>
+{{/if}}
